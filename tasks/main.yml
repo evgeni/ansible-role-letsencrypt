@@ -1,2 +1,44 @@
 ---
 # tasks file for letsencrypt
+- name: enable backports
+  apt_repository: repo='deb http://httpredir.debian.org/debian {{ansible_distribution_release}}-backports main' state=present
+  when: ansible_os_family == "Debian" and ansible_distribution_release == "jessie"
+
+- name: install letsencrypt.sh from backports
+  apt: name={{item}} state=present default_release={{ansible_distribution_release}}-backports
+  when: ansible_os_family == "Debian" and ansible_distribution_release == "jessie"
+  with_items:
+    - letsencrypt.sh
+
+- name: install letsencrypt.sh
+  apt: name={{item}} state=present
+  when: ansible_os_family == "Debian" and ansible_distribution_release != "jessie"
+  with_items:
+    - letsencrypt.sh
+
+- name: configure nginx to serve /.well-known/acme-challenge
+  template: src=templates/nginx-letsencrypt.conf.j2 dest=/etc/nginx/global.d/letsencrypt.conf
+  when: letsencrypt_nginx
+
+- name: create letsencrypt user
+  user: name={{ letsencrypt_user }} home={{ letsencrypt_basedir }}
+
+- name: allow letsencrypt user to reload nginx
+  template: src=templates/nginx-sudoers.j2 dest=/etc/sudoers.d/letsencrypt-nginx
+  when: letsencrypt_nginx
+
+- name: create {{ letsencrypt_basedir }}/.acme-challenges directory
+  file: path={{ letsencrypt_basedir }}/.acme-challenges state=directory owner={{ letsencrypt_user }}
+
+- name: create letsencrypt config.sh
+  template: src=templates/config.sh.j2 dest={{ letsencrypt_basedir }}/config.sh
+
+- name: create letsencrypt hook.sh
+  template: src=templates/hook.sh.j2 dest={{ letsencrypt_basedir }}/hook.sh mode=755
+
+- name: create letsencrypt domains.txt
+  template: src=templates/domains.txt.j2 dest={{ letsencrypt_basedir }}/domains.txt
+  notify: run letsencrypt.sh
+
+- name: ensure letsencrypt crontab is {{ (letsencrypt_domains|length >0) | ternary('present', 'absent') }}
+  cron: minute=0 job="chronic letsencrypt.sh --cron --config {{ letsencrypt_basedir }}/config.sh" name="letsencrypt.sh" user="{{ letsencrypt_user }}" state={{ (letsencrypt_domains|length >0) | ternary('present', 'absent') }}
