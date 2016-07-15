@@ -2,8 +2,7 @@
 language: python
 python: "2.7"
 
-# Use the new container infrastructure
-sudo: false
+sudo: true
 
 # Install ansible
 addons:
@@ -33,11 +32,11 @@ script:
   - wget http://mirrors.kernel.org/ubuntu/pool/universe/l/letsencrypt.sh/letsencrypt.sh_0.1.0-3_all.deb && sudo dpkg -i letsencrypt.sh_0.1.0-3_all.deb
 
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook tests/test.yaml -i tests/inventory --connection=local --become
+  - ansible-playbook tests/test.yml -i tests/inventory --connection=local --become
 
   # Run the role/playbook again, checking to make sure it's idempotent.
   - >
-    ansible-playbook tests/test.yaml -i tests/inventory --connection=local --become
+    ansible-playbook tests/test.yml -i tests/inventory --connection=local --become
     | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
