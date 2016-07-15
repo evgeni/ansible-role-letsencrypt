@@ -3,6 +3,8 @@ letsencrypt
 
 Ansible [Let's Encrypt](https://letsencrypt.org/) role, using [letsencrypt.sh](https://github.com/lukas2511/letsencrypt.sh).
 
+[![Build Status](https://travis-ci.org/evgeni/ansible-role-letsencrypt.svg?branch=master)](https://travis-ci.org/evgeni/ansible-role-letsencrypt)
+
 Requirements
 ------------
 
