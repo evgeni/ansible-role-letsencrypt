@@ -27,9 +27,9 @@ script:
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
-  # TravisCI runs on an older Ubuntu which does not have letsencrypt.sh yet
+  # TravisCI runs on an older Ubuntu which does not have dehydrated yet
   # don't do this at home!
-  - wget http://mirrors.kernel.org/ubuntu/pool/universe/l/letsencrypt.sh/letsencrypt.sh_0.1.0-3_all.deb && sudo dpkg -i letsencrypt.sh_0.1.0-3_all.deb
+  - wget http://mirrors.kernel.org/ubuntu/pool/universe/d/dehydrated/dehydrated_0.3.1-3_all.deb && sudo dpkg -i dehydrated_0.3.1-3_all.deb
 
   # Run the role/playbook with ansible-playbook.
   - ansible-playbook tests/test.yml -i tests/inventory --connection=local --become
