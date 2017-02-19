@@ -1,20 +1,20 @@
 ---
-# tasks file for letsencrypt
+# tasks file for dehydrated
 - name: enable backports
   apt_repository: repo='deb http://httpredir.debian.org/debian {{ansible_distribution_release}}-backports main' state=present
   when: ansible_os_family == "Debian" and ansible_distribution_release == "jessie"
 
-- name: install letsencrypt.sh from backports
+- name: install dehydrated from backports
   apt: name={{item}} state=present default_release={{ansible_distribution_release}}-backports
   when: ansible_os_family == "Debian" and ansible_distribution_release == "jessie"
   with_items:
-    - letsencrypt.sh
+    - dehydrated
 
-- name: install letsencrypt.sh
+- name: install dehydrated
   apt: name={{item}} state=present
   when: ansible_os_family == "Debian" and ansible_distribution_release != "jessie"
   with_items:
-    - letsencrypt.sh
+    - dehydrated
 
 - name: configure nginx to serve /.well-known/acme-challenge
   template: src=templates/nginx-letsencrypt.conf.j2 dest=/etc/nginx/global.d/letsencrypt.conf
@@ -38,7 +38,7 @@
 
 - name: create letsencrypt domains.txt
   template: src=templates/domains.txt.j2 dest={{ letsencrypt_basedir }}/domains.txt
-  notify: run letsencrypt.sh
+  notify: run dehydrated
 
 - name: ensure letsencrypt crontab is {{ (letsencrypt_domains|length >0) | ternary('present', 'absent') }}
-  cron: minute=0 job="chronic letsencrypt.sh --cron --config {{ letsencrypt_basedir }}/config.sh" name="letsencrypt.sh" user="{{ letsencrypt_user }}" state={{ (letsencrypt_domains|length >0) | ternary('present', 'absent') }}
+  cron: minute=0 job="chronic dehydrated --cron --config {{ letsencrypt_basedir }}/config.sh" name="dehydrated" user="{{ letsencrypt_user }}" state={{ (letsencrypt_domains|length >0) | ternary('present', 'absent') }}
