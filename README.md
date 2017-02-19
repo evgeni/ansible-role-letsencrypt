@@ -1,7 +1,7 @@
 letsencrypt
 ===========
 
-Ansible [Let's Encrypt](https://letsencrypt.org/) role, using [letsencrypt.sh](https://github.com/lukas2511/letsencrypt.sh).
+Ansible [Let's Encrypt](https://letsencrypt.org/) role, using [dehydrated](https://github.com/lukas2511/dehydrated).
 
 [![Build Status](https://travis-ci.org/evgeni/ansible-role-letsencrypt.svg?branch=master)](https://travis-ci.org/evgeni/ansible-role-letsencrypt)
 
