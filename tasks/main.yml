@@ -55,7 +55,7 @@
   template:
     src: templates/hook.sh.j2
     dest: "{{ letsencrypt_basedir }}/hook.sh"
-    mode: 755
+    mode: 0755
 
 - name: create letsencrypt domains.txt
   template:
