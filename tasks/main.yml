@@ -41,17 +41,11 @@
     name: "{{ letsencrypt_user }}"
     home: "{{ letsencrypt_basedir }}"
 
-- name: allow letsencrypt user to reload nginx
+- name: allow letsencrypt user to reload {{ letsencrypt_httpd }}
   template:
-    src: templates/nginx-sudoers.j2
-    dest: /etc/sudoers.d/letsencrypt-nginx
-  when: letsencrypt_httpd == 'nginx'
-
-- name: allow letsencrypt user to reload apache2
-  template:
-    src: templates/apache2-sudoers.j2
-    dest: /etc/sudoers.d/letsencrypt-apache2
-  when: letsencrypt_httpd == 'apache2'
+    src: templates/sudoers.j2
+    dest: /etc/sudoers.d/letsencrypt
+  when: letsencrypt_httpd != 'none'
 
 - name: create {{ letsencrypt_basedir }}/.acme-challenges directory
   file:
