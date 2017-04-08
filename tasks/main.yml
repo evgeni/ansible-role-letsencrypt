@@ -27,13 +27,13 @@
   template:
     src: templates/nginx-letsencrypt.conf.j2
     dest: /etc/nginx/global.d/letsencrypt.conf
-  when: letsencrypt_nginx
+  when: letsencrypt_httpd == 'nginx'
 
 - name: configure apache2 to serve /.well-known/acme-challenge
   template:
     src: templates/apache2-letsencrypt.conf.j2
     dest: /etc/apache2/conf-enabled/letsencrypt.conf
-  when: letsencrypt_apache2
+  when: letsencrypt_httpd == 'apache2'
   notify: letsencrypt_apache2_reload
 
 - name: create letsencrypt user
@@ -45,13 +45,13 @@
   template:
     src: templates/nginx-sudoers.j2
     dest: /etc/sudoers.d/letsencrypt-nginx
-  when: letsencrypt_nginx
+  when: letsencrypt_httpd == 'nginx'
 
 - name: allow letsencrypt user to reload apache2
   template:
     src: templates/apache2-sudoers.j2
     dest: /etc/sudoers.d/letsencrypt-apache2
-  when: letsencrypt_apache2
+  when: letsencrypt_httpd == 'apache2'
 
 - name: create {{ letsencrypt_basedir }}/.acme-challenges directory
   file:

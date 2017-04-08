@@ -18,7 +18,7 @@ Role Variables
 * `letsencrypt_basedir`: where to store certs and challenges, default: `/srv/letsencrypt`
 * `letsencrypt_pk_renew`: whether to generate a new private key on every update, default: `no`
 * `letsencrypt_domains`: which domains to request certs for, default: `[]`
-* `letsencrypt_nginx`: enable NGINX integration, default: `false`
+* `letsencrypt_httpd`: enable http integration, default: `none`, choices: `none`, `nginx`, `apache2`
 
 Dependencies
 ------------
