@@ -5,3 +5,4 @@ letsencrypt_basedir: /srv/letsencrypt
 letsencrypt_pk_renew: no
 letsencrypt_domains: []
 letsencrypt_nginx: false
+letsencrypt_apache2: false

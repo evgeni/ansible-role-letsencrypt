@@ -5,3 +5,7 @@
   become_user: "{{ letsencrypt_user }}"
   command: dehydrated --cron --config {{ letsencrypt_basedir }}/config.sh
   when: letsencrypt_domains|length > 0
+- name: letsencrypt_apache2_reload
+  service:
+    name: apache2
+    state: reloaded
