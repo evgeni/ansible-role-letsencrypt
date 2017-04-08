@@ -28,13 +28,14 @@
     src: templates/nginx-letsencrypt.conf.j2
     dest: /etc/nginx/global.d/letsencrypt.conf
   when: letsencrypt_httpd == 'nginx'
+  notify: letsencrypt_httpd_reload
 
 - name: configure apache2 to serve /.well-known/acme-challenge
   template:
     src: templates/apache2-letsencrypt.conf.j2
     dest: /etc/apache2/conf-enabled/letsencrypt.conf
   when: letsencrypt_httpd == 'apache2'
-  notify: letsencrypt_apache2_reload
+  notify: letsencrypt_httpd_reload
 
 - name: create letsencrypt user
   user:
