@@ -1,27 +1,8 @@
 ---
-# tasks file for dehydrated
-- name: enable backports
-  apt_repository:
-    repo: 'deb http://httpredir.debian.org/debian {{ansible_distribution_release}}-backports main'
-    state: present
-  when: ansible_os_family == "Debian" and ansible_distribution_release == "jessie"
-
-- name: install dehydrated from backports
-  apt:
-    name: "{{item}}"
-    state: present
-    default_release: "{{ansible_distribution_release}}-backports"
-  when: ansible_os_family == "Debian" and ansible_distribution_release == "jessie"
-  with_items:
-    - dehydrated
-
 - name: install dehydrated
   apt:
-    name: "{{item}}"
+    name: "dehydrated"
     state: present
-  when: ansible_os_family == "Debian" and ansible_distribution_release != "jessie"
-  with_items:
-    - dehydrated
 
 - name: configure nginx to serve /.well-known/acme-challenge
   template:
